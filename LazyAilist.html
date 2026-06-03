@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LazyAIList | Find AI Tools the Easy Way</title>
+    <meta name="description" content="The lazy person's guide to AI tools. Discover and access the best AI software in one curated place without the fluff.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: {} }
+        }
+    </script>
+    <style>
+        body { scroll-behavior: smooth; }
+        .tool-card { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+        .tool-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .dark .tool-card:hover { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3); border-color: #4f46e5; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .gradient-text { background: linear-gradient(to right, #4f46e5, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* MPA Page Styles */
+        .page-view { display: none; animation: fadeIn 0.4s ease-out forwards; }
+        .page-view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-300 font-sans antialiased transition-colors duration-300 flex flex-col min-h-screen">
+
+    <nav class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="#home" class="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+                    <div class="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">L</div>
+                    <span class="font-bold text-xl text-slate-900 dark:text-white tracking-tight">LazyAI<span class="text-indigo-600 dark:text-indigo-400">List</span></span>
+                </a>
+                
+                <!-- Desktop Nav Links -->
+                <div class="flex items-center space-x-4 md:space-x-6">
+                    <a href="#home" class="hidden md:block text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400" data-i18n="nav_home">Home</a>
+                    <a href="#submit" class="hidden md:block text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400" data-i18n="nav_submit">Submit Tool</a>
+                    
+                    <!-- Language Switcher -->
+                    <select id="langSwitcher" class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg py-1.5 px-2 md:px-3 text-xs md:text-sm focus:ring-2 focus:ring-indigo-500 cursor-pointer outline-none transition-colors">
+                        <option value="en">🇺🇸 EN</option>
+                        <option value="es">🇪🇸 ES</option>
+                        <option value="fr">🇫🇷 FR</option>
+                        <option value="hi">🇮🇳 HI</option>
+                    </select>
+
+                    <!-- Theme Toggle -->
+                    <button id="themeToggle" class="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors focus:outline-none">
+                        <svg id="sunIcon" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="moonIcon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MPA View Container -->
+    <div id="app-container" class="flex-grow w-full">
+
+        <!-- ================= HOME PAGE ================= -->
+        <div id="page-home" class="page-view active">
+            <header class="max-w-4xl mx-auto px-4 sm:px-6 py-16 md:py-24 text-center mt-4">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 dark:text-white mb-6 tracking-tight">
+                    <span data-i18n="hero_title_1">The</span> <span class="gradient-text" data-i18n="hero_title_2">lazy person's</span> <span data-i18n="hero_title_3">guide to AI tools</span>
+                </h1>
+                <p class="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto" data-i18n="hero_subtitle">
+                    No fluff. No endless searching. Just a straightforward, curated list of the best AI software out there so you can get back to being lazy.
+                </p>
+                
+                <!-- Search Bar -->
+                <div class="relative max-w-2xl mx-auto">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg class="h-6 w-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input type="text" id="searchInput" data-i18n-placeholder="search_placeholder" placeholder="Search for tools, categories, or keywords..." 
+                           class="w-full pl-12 pr-6 py-4 rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-lg focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 text-lg transition-all placeholder-slate-400">
+                </div>
+            </header>
+
+            <!-- Google AdSense Banner Placement -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 mb-12 flex justify-center text-center overflow-hidden">
+                <div class="w-full max-w-4xl bg-slate-100 dark:bg-slate-800/30 rounded-xl border border-slate-200 dark:border-slate-800 p-2 flex flex-col items-center justify-center min-h-[100px] md:min-h-[120px]">
+                    <span class="text-[10px] text-slate-400 mb-1 uppercase tracking-widest" data-i18n="advertisement">Advertisement</span>
+                    <!-- Place your AdSense script below. Ensured w-full to prevent availableWidth=0 error -->
+                    <ins class="adsbygoogle w-full" style="display:block; text-align:center; width:100%;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-YOUR_CLIENT_ID" data-ad-slot="YOUR_AD_SLOT_ID"></ins>
+                    <!-- <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script> -->
+                </div>
+            </div>
+
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 mb-16">
+                <div class="flex items-center gap-4 mb-6">
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400" data-i18n="featured_tools">Featured Tools</h2>
+                    <div class="h-px bg-slate-200 dark:bg-slate-800 flex-grow"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Featured Card 1 -->
+                    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 p-[1px]">
+                        <div class="h-full w-full bg-white dark:bg-slate-900 rounded-2xl p-6 flex flex-col justify-between relative z-10 hover:bg-transparent dark:hover:bg-transparent transition-colors duration-300 group">
+                            <div class="absolute top-4 right-4 bg-amber-400 text-amber-900 text-xs font-bold px-2 py-1 rounded flex items-center gap-1">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg> 
+                                <span data-i18n="featured_badge">Featured</span>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-white transition-colors mb-2">Atoms</h3>
+                                <p class="text-slate-600 dark:text-slate-400 group-hover:text-white/90 transition-colors mb-4" data-i18n="feat_1_desc">The ultimate AI habit tracker. Build routines, break bad habits, and transform your daily life with AI-driven insights.</p>
+                            </div>
+                            <a href="https://atoms.com" target="_blank" class="inline-block mt-4 text-indigo-600 dark:text-indigo-400 font-semibold group-hover:text-white transition-colors">
+                                <span data-i18n="visit_website">Visit Website</span> →
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Featured Card 2 -->
+                    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-400 to-cyan-500 p-[1px]">
+                        <div class="h-full w-full bg-white dark:bg-slate-900 rounded-2xl p-6 flex flex-col justify-between relative z-10 hover:bg-transparent dark:hover:bg-transparent transition-colors duration-300 group">
+                            <div class="absolute top-4 right-4 bg-amber-400 text-amber-900 text-xs font-bold px-2 py-1 rounded flex items-center gap-1">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg> 
+                                <span data-i18n="featured_badge">Featured</span>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-white transition-colors mb-2">Adapt</h3>
+                                <p class="text-slate-600 dark:text-slate-400 group-hover:text-white/90 transition-colors mb-4" data-i18n="feat_2_desc">Slack-native AI agent that connects to your business tools to answer data questions and automate recurring workflows.</p>
+                            </div>
+                            <a href="https://adapt.ai" target="_blank" class="inline-block mt-4 text-emerald-600 dark:text-emerald-400 font-semibold group-hover:text-white transition-colors">
+                                <span data-i18n="visit_website">Visit Website</span> →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
+                <div id="filterContainer" class="flex flex-col gap-6 mb-10 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        <!-- Categories -->
+                        <div class="flex-grow">
+                            <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-300 mb-3 uppercase tracking-wide" data-i18n="categories">Categories</h3>
+                            <div class="flex flex-wrap gap-2 max-h-48 overflow-y-auto hide-scrollbar pb-2" id="categoryFilters">
+                                <!-- Injected by JS -->
+                            </div>
+                        </div>
+                        <!-- Vertical Divider -->
+                        <div class="hidden lg:block w-px bg-slate-200 dark:bg-slate-700"></div>
+                        <!-- Pricing -->
+                        <div class="lg:w-64 flex-shrink-0">
+                            <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-300 mb-3 uppercase tracking-wide" data-i18n="pricing">Pricing</h3>
+                            <div class="flex flex-wrap gap-2" id="pricingFilters">
+                                <button class="price-btn bg-slate-800 dark:bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors active-filter" data-price="all" data-i18n="any_price">Any Price</button>
+                                <button class="price-btn bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg font-medium text-sm transition-colors inactive-filter" data-price="Free" data-i18n="free">Free</button>
+                                <button class="price-btn bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg font-medium text-sm transition-colors inactive-filter" data-price="Freemium" data-i18n="freemium">Freemium</button>
+                                <button class="price-btn bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg font-medium text-sm transition-colors inactive-filter" data-price="Paid" data-i18n="paid">Paid</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-end mb-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white"><span data-i18n="directory">Directory</span> <span id="toolCount" class="text-slate-500 dark:text-slate-400 text-base font-normal ml-2"></span></h2>
+                </div>
+
+                <div id="toolsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards injected by JavaScript -->
+                </div>
+            </main>
+        </div>
+
+        <!-- ================= SUBMIT TOOL PAGE ================= -->
+        <div id="page-submit" class="page-view">
+            <main class="max-w-3xl mx-auto px-4 sm:px-6 py-16 md:py-24">
+                <a href="#home" class="inline-flex items-center text-sm text-indigo-600 dark:text-indigo-400 hover:underline mb-8">
+                    ← <span data-i18n="back_home" class="ml-1">Back to Directory</span>
+                </a>
+                
+                <h1 class="text-4xl font-extrabold text-slate-900 dark:text-white mb-4" data-i18n="submit_title">Submit an AI Tool</h1>
+                <p class="text-lg text-slate-600 dark:text-slate-400 mb-10" data-i18n="submit_subtitle">Join the directory. Fill out the form below and our team will review your software for inclusion.</p>
+                
+                <form class="space-y-6 bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm" onsubmit="event.preventDefault(); this.querySelector('button').innerText = 'Submitted Successfully!'; setTimeout(()=> window.location.hash='#home', 1500);">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" data-i18n="form_tool_name">Tool Name</label>
+                        <input type="text" required class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" data-i18n="form_website">Website URL</label>
+                        <input type="url" required placeholder="https://" class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" data-i18n="form_desc">Short Description</label>
+                        <textarea required rows="4" class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-colors" data-i18n="form_submit_btn">Submit for Review</button>
+                </form>
+            </main>
+        </div>
+
+    </div> <!-- End MPA Container -->
+
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pt-16 pb-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
+                
+                <!-- SEO & About Text -->
+                <div class="md:col-span-6 lg:col-span-4">
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-6 h-6 bg-indigo-600 rounded flex items-center justify-center text-white font-bold text-sm">L</div>
+                        <span class="font-bold text-lg text-slate-900 dark:text-white">LazyAIList</span>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-4 leading-relaxed" data-i18n="footer_p1">
+                        AI content writers, AI image generators, music creation tools, writing tools, Search engine optimization, translation, and more.
+                    </p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4" data-i18n="footer_p2">
+                        Whatever your goals are, we've got the tools for you. We've scoured the internet and found the best AI software around!
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="md:col-span-3 lg:col-span-3 lg:col-start-6">
+                    <h4 class="font-semibold text-slate-900 dark:text-white mb-6 uppercase text-sm tracking-wider" data-i18n="explore">Explore</h4>
+                    <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                        <li><a href="#submit" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-2">⚒️ <span data-i18n="nav_submit">Submit a tool</span></a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="md:col-span-12 lg:col-span-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 h-fit">
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-2 text-lg" data-i18n="newsletter_title">LazyAIList Newsletter</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-6" data-i18n="newsletter_desc">
+                        Get the latest updates on AI software — specifically curated for entrepreneurs, creators, and innovators like you.
+                    </p>
+                    <form class="flex flex-col gap-3" onsubmit="event.preventDefault(); this.querySelector('button').innerText = 'Subscribed!';">
+                        <input type="email" data-i18n-placeholder="enter_email" placeholder="Enter your email" required class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-md" data-i18n="subscribe">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-slate-200 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-sm text-slate-500 dark:text-slate-400 text-center md:text-left">
+                    <p class="mb-1" data-i18n="copyright">Copyright © 2026 Indicreed Studio. All rights reserved.</p>
+                    <p class="text-xs" data-i18n="disclaimer">LazyAIList.com is a free resource and does not charge subscription fees.</p>
+                </div>
+                <div class="flex gap-6 text-sm text-slate-500 dark:text-slate-400">
+                    <button onclick="document.getElementById('privacyModal').classList.remove('hidden')" class="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer text-left" data-i18n="privacy">Privacy Policy</button>
+                    <button onclick="document.getElementById('termsModal').classList.remove('hidden')" class="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer text-left" data-i18n="terms">Terms of Use</button>
+                    <a href="https://www.linkedin.com/company/indicreed-studios/" target="_blank" rel="noopener noreferrer" class="hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="linkedin">Connect with us on LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacyModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-800">
+            <div class="sticky top-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur border-b border-slate-200 dark:border-slate-800 p-6 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white" data-i18n="privacy">Privacy Policy</h3>
+                <button onclick="document.getElementById('privacyModal').classList.add('hidden')" class="text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 text-slate-600 dark:text-slate-400 space-y-4 text-sm leading-relaxed">
+                <p><strong>Effective Date:</strong> June 3, 2026</p>
+                <p>Welcome to LazyAIList, operated by Indicreed Studio. Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your information when you visit our directory.</p>
+                <h4 class="font-bold text-slate-900 dark:text-white mt-4">1. Information We Collect</h4>
+                <p>We do not require you to create an account to use our directory. We only collect information you voluntarily provide, such as your email address when subscribing to our newsletter, or details provided when submitting an AI tool for review.</p>
+                <h4 class="font-bold text-slate-900 dark:text-white mt-4">2. Cookies and Tracking</h4>
+                <p>We use basic cookies to remember your theme preference (Light/Dark mode) and to ensure our website functions correctly. We may also use standard analytics to understand website traffic, which is anonymized.</p>
+                <h4 class="font-bold text-slate-900 dark:text-white mt-4">3. Third-Party Links</h4>
+                <p>Our directory contains links to external AI tools. We are not responsible for the privacy practices or content of these third-party websites. We encourage you to read their privacy policies.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms of Use Modal -->
+    <div id="termsModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-800">
+            <div class="sticky top-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur border-b border-slate-200 dark:border-slate-800 p-6 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white" data-i18n="terms">Terms of Use</h3>
+                <button onclick="document.getElementById('termsModal').classList.add('hidden')" class="text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 text-slate-600 dark:text-slate-400 space-y-4 text-sm leading-relaxed">
+                <p><strong>Effective Date:</strong> June 3, 2026</p>
+                <p>By accessing or using LazyAIList (by Indicreed Studio), you agree to be bound by these Terms of Use.</p>
+                <h4 class="font-bold text-slate-900 dark:text-white mt-4">1. Use of Directory</h4>
+                <p>LazyAIList provides a curated directory of AI software for informational purposes. While we strive to keep information accurate, we do not guarantee the performance, safety, or pricing of any third-party tools listed.</p>
+                <h4 class="font-bold text-slate-900 dark:text-white mt-4">2. Tool Submissions</h4>
+                <p>By submitting a tool to our directory, you grant us the right to display its name, description, and link. We reserve the right to reject, edit, or remove any submission at our sole discretion without notice.</p>
+                <h4 class="font-bold text-slate-900 dark:text-white mt-4">3. Intellectual Property</h4>
+                <p>The design, layout, and original content of LazyAIList are the property of Indicreed Studio. Trademarks and logos of the listed AI tools belong to their respective owners.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Banner -->
+    <div id="cookieBanner" class="fixed bottom-4 left-4 max-w-sm bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 p-5 transform transition-transform duration-500 translate-y-full opacity-0 z-50">
+        <h4 class="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">🍪 Cookies</h4>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
+            We care about your data, and we use cookies only to improve your experience. For a complete overview, see our Privacy Policy.
+        </p>
+        <button onclick="acceptCookies()" class="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-medium py-2 rounded-lg transition-colors hover:bg-slate-800 dark:hover:bg-slate-100">
+            I Agree
+        </button>
+    </div>
+
+    <script>
+        // --- Theme Management ---
+        const html = document.documentElement;
+        const themeToggle = document.getElementById('themeToggle');
+        
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+
+        // --- Multi-Page Application (MPA) Router ---
+        function handleRouting() {
+            const hash = window.location.hash || '#home';
+            
+            // Hide all pages
+            document.querySelectorAll('.page-view').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show requested page (fallback to home if not found)
+            const activePage = document.querySelector(hash.replace('#', '#page-'));
+            if (activePage) {
+                activePage.classList.add('active');
+            } else {
+                document.getElementById('page-home').classList.add('active');
+            }
+            window.scrollTo(0, 0);
+        }
+        
+        // Listen for URL changes
+        window.addEventListener('hashchange', handleRouting);
+        handleRouting(); // Initial setup
+
+
+        // --- i18n Translation Engine ---
+        const translations = {
+            en: {
+                nav_home: "Home", nav_submit: "Submit Tool",
+                hero_title_1: "The", hero_title_2: "lazy person's", hero_title_3: "guide to AI tools",
+                hero_subtitle: "No fluff. No endless searching. Just a straightforward, curated list of the best AI software out there so you can get back to being lazy.",
+                search_placeholder: "Search for tools, categories, or keywords...",
+                advertisement: "Advertisement", featured_tools: "Featured Tools", featured_badge: "Featured",
+                feat_1_desc: "The ultimate AI habit tracker. Build routines, break bad habits, and transform your daily life with AI-driven insights.",
+                feat_2_desc: "Slack-native AI agent that connects to your business tools to answer data questions and automate recurring workflows.",
+                visit_website: "Visit Website", categories: "Categories", pricing: "Pricing",
+                any_price: "Any Price", free: "Free", freemium: "Freemium", paid: "Paid", directory: "Directory",
+                back_home: "Back to Directory", submit_title: "Submit an AI Tool", submit_subtitle: "Join the directory. Fill out the form below and our team will review your software for inclusion.",
+                form_tool_name: "Tool Name", form_website: "Website URL", form_desc: "Short Description", form_submit_btn: "Submit for Review",
+                footer_p1: "AI content writers, AI image generators, music creation tools, writing tools, Search engine optimization, translation, and more.",
+                footer_p2: "Whatever your goals are, we've got the tools for you. We've scoured the internet and found the best AI software around!",
+                explore: "Explore", newsletter_title: "LazyAIList Newsletter", newsletter_desc: "Get the latest updates on AI software — specifically curated for entrepreneurs, creators, and innovators like you.",
+                enter_email: "Enter your email", subscribe: "Subscribe", privacy: "Privacy Policy", terms: "Terms of Use", linkedin: "Connect with us on LinkedIn",
+                all_categories: "All Categories", no_results: "No tools found matching your criteria.", copyright: "Copyright © 2026 Indicreed Studio. All rights reserved.", disclaimer: "LazyAIList.com is a free resource and does not charge subscription fees."
+            },
+            es: {
+                nav_home: "Inicio", nav_submit: "Enviar Herramienta",
+                hero_title_1: "La", hero_title_2: "guía para perezosos", hero_title_3: "sobre IA",
+                hero_subtitle: "Sin rodeos. Sin búsquedas interminables. Solo una lista directa y seleccionada del mejor software de IA.",
+                search_placeholder: "Buscar herramientas, categorías...",
+                advertisement: "Anuncio", featured_tools: "Herramientas Destacadas", featured_badge: "Destacado",
+                feat_1_desc: "El rastreador de hábitos de IA definitivo. Crea rutinas y transforma tu vida diaria.",
+                feat_2_desc: "Agente de IA nativo de Slack que se conecta a tus herramientas comerciales para automatizar flujos de trabajo.",
+                visit_website: "Visitar Sitio", categories: "Categorías", pricing: "Precios",
+                any_price: "Cualquier Precio", free: "Gratis", freemium: "Freemium", paid: "De Pago", directory: "Directorio",
+                back_home: "Volver al Directorio", submit_title: "Enviar Herramienta", submit_subtitle: "Únete al directorio. Completa el formulario para revisión.",
+                form_tool_name: "Nombre", form_website: "Sitio Web", form_desc: "Descripción Corta", form_submit_btn: "Enviar",
+                footer_p1: "Escritores de IA, generadores de imágenes, música, herramientas de escritura, SEO, traducción y más.",
+                footer_p2: "Cualesquiera que sean tus objetivos, tenemos las herramientas. ¡Hemos buscado el mejor software!",
+                explore: "Explorar", newsletter_title: "Boletín LazyAIList", newsletter_desc: "Obtén las últimas actualizaciones sobre software de IA.",
+                enter_email: "Tu correo", subscribe: "Suscribirse", privacy: "Privacidad", terms: "Términos", linkedin: "Conecta en LinkedIn",
+                all_categories: "Todas", no_results: "No se encontraron herramientas.", copyright: "Derechos de autor © 2026 Indicreed Studio.", disclaimer: "LazyAIList es gratis y no cobra tarifas."
+            },
+            fr: {
+                nav_home: "Accueil", nav_submit: "Soumettre",
+                hero_title_1: "Le", hero_title_2: "guide du paresseux", hero_title_3: "pour l'IA",
+                hero_subtitle: "Pas de blabla. Juste une liste simple et organisée des meilleurs logiciels d'IA pour que vous puissiez redevenir paresseux.",
+                search_placeholder: "Rechercher des outils, catégories...",
+                advertisement: "Publicité", featured_tools: "En Vedette", featured_badge: "Vedette",
+                feat_1_desc: "Le suivi d'habitudes IA ultime. Créez des routines et transformez votre quotidien avec l'IA.",
+                feat_2_desc: "Agent IA natif Slack qui se connecte à vos outils professionnels pour automatiser les flux de travail.",
+                visit_website: "Visiter le Site", categories: "Catégories", pricing: "Tarifs",
+                any_price: "Tous les Prix", free: "Gratuit", freemium: "Freemium", paid: "Payant", directory: "Annuaire",
+                back_home: "Retour à l'Annuaire", submit_title: "Soumettre un Outil", submit_subtitle: "Rejoignez l'annuaire. Remplissez le formulaire ci-dessous.",
+                form_tool_name: "Nom", form_website: "URL du site Web", form_desc: "Courte Description", form_submit_btn: "Soumettre",
+                footer_p1: "Rédacteurs IA, générateurs d'images, musique, référencement, traduction, et plus.",
+                footer_p2: "Quels que soient vos objectifs, nous avons les outils. Nous avons trouvé les meilleurs logiciels...",
+                explore: "Explorer", newsletter_title: "Newsletter LazyAIList", newsletter_desc: "Obtenez les dernières mises à jour sur les logiciels d'IA.",
+                enter_email: "Votre e-mail", subscribe: "S'abonner", privacy: "Confidentialité", terms: "Conditions", linkedin: "Connectez-vous sur LinkedIn",
+                all_categories: "Toutes", no_results: "Aucun outil trouvé.", copyright: "Copyright © 2026 Indicreed Studio.", disclaimer: "LazyAIList est gratuit."
+            },
+            hi: {
+                nav_home: "होम", nav_submit: "टूल जमा करें",
+                hero_title_1: "एआई टूल्स के लिए", hero_title_2: "आलसी व्यक्ति की", hero_title_3: "गाइड",
+                hero_subtitle: "कोई बकवास नहीं। बस सबसे अच्छे एआई सॉफ्टवेयर की एक सीधी सूची ताकि आप वापस आलसी बन सकें।",
+                search_placeholder: "टूल्स या श्रेणियां खोजें...",
+                advertisement: "विज्ञापन", featured_tools: "विशेष टूल्स", featured_badge: "विशेष",
+                feat_1_desc: "सर्वश्रेष्ठ एआई आदत ट्रैकर। अपनी दिनचर्या बनाएं और एआई के साथ अपना जीवन बदलें।",
+                feat_2_desc: "स्लैक-नेटिव एआई एजेंट जो डेटा प्रश्नों का उत्तर देने के लिए आपके व्यावसायिक टूल से जुड़ता है।",
+                visit_website: "वेबसाइट देखें", categories: "श्रेणियाँ", pricing: "मूल्य निर्धारण",
+                any_price: "सभी", free: "मुफ़्त", freemium: "फ्रीमियम", paid: "सशुल्क", directory: "निर्देशिका",
+                back_home: "निर्देशिका पर वापस", submit_title: "एआई टूल सबमिट करें", submit_subtitle: "निर्देशिका में शामिल हों। नीचे दिया गया फॉर्म भरें।",
+                form_tool_name: "नाम", form_website: "वेबसाइट", form_desc: "संक्षिप्त विवरण", form_submit_btn: "सबमिट करें",
+                footer_p1: "एआई सामग्री लेखक, छवि जनरेटर, संगीत निर्माण, एसईओ, अनुवाद, और बहुत कुछ।",
+                footer_p2: "आपके लक्ष्य जो भी हों, हमारे पास आपके लिए उपकरण हैं।",
+                explore: "अन्वेषण करें", newsletter_title: "न्यूज़लेटर", newsletter_desc: "एआई सॉफ़्टवेयर पर नवीनतम अपडेट प्राप्त करें।",
+                enter_email: "अपना ईमेल दर्ज करें", subscribe: "सदस्यता लें", privacy: "गोपनीयता", terms: "शर्तें", linkedin: "लिंक्डइन",
+                all_categories: "सभी श्रेणियां", no_results: "कोई टूल नहीं मिला।", copyright: "कॉपीराइट © 2026 इंडिक्रीड स्टूडियो।", disclaimer: "यह एक मुफ्त संसाधन है।"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function applyTranslations(lang) {
+            currentLang = lang;
+            
+            // Translate standard text elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+
+            // Translate input placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+
+            // Re-render UI pieces built by Javascript to update dynamic tags
+            setupCategories();
+            renderTools();
+        }
+
+        document.getElementById('langSwitcher').addEventListener('change', (e) => {
+            applyTranslations(e.target.value);
+        });
+
+        // --- Database of AI Tools ---
+        const tools = [
+            { name: 'Pexo', categories: ['Generative Video', 'Text-to-Video', 'Social Media'], pricing: 'Freemium', desc: 'Conversational AI video platform that turns plain-language ideas, URLs, or images into publish-ready videos with voiceovers, subtitles, and music included.' },
+            { name: 'Magica', categories: ['AI Agents', 'Productivity', 'Generative Art', 'Video Generation'], pricing: 'Freemium', desc: 'Magica gives you one AI agent for chat, images, video, audio, presentations, workflows, model access, and connected tools. All for one single low price.' },
+            { name: 'AI Overview Optimizer', categories: ['SEO', 'GEO', 'Marketing'], pricing: 'Freemium', desc: 'AI visibility audit tool that identifies why your pages are bypassed by AI search systems and provides specific fixes to increase citation chances in Google AI Overviews.' },
+            { name: 'Clico', categories: ['Productivity', 'Copywriting', 'AI Agents'], pricing: 'Free', desc: 'Clico is a browser extension that puts AI inside every text field. Press a shortcut to draft, reply, or rewrite in context without switching tabs. Free, no setup needed.' },
+            { name: 'i10x', categories: ['Productivity'], pricing: 'Freemium', desc: 'i10X gives you access to 30+ AI models and 500+ prebuilt task agents through a single platform. Ideal for small teams, creators, and AI-heavy workflows.' },
+            { name: 'Higgsfield', categories: ['Video Generation'], pricing: 'Freemium', desc: 'AI video platform with precision camera control for filmmakers and creators. Generate cinematic shots using crash zooms, dollies, and overhead angles. Multi-model access including Sora 2 with unlimited generations on paid plans.' },
+            { name: 'Munch Studio', categories: ['Social Media'], pricing: 'Freemium', desc: 'Munch Studio is an automated social media manager that writes, creates, and schedules on-brand content, solving the consistency problem for busy founders and small teams.' },
+            { name: 'Vidnoz', categories: ['Generative Video'], pricing: 'Freemium', desc: 'An AI video creation tool offering text-to-video conversion with lifelike avatars and 100+ voiceovers. With 200+ templates and 23+ languages supported, Vidnoz facilitates quick, affordable, and quality video content production.' },
+            { name: 'Klap', categories: ['Video Editing'], pricing: 'Paid', desc: 'Klap transforms your YouTube content into digestible short videos for TikToks, Reels, and more using AI. With a unique focus on curation, framing, captions, and style, it ensures rapid, ready-to-publish video generation.' },
+            { name: 'Wispr Flow', categories: ['Productivity'], pricing: 'Freemium', desc: 'AI voice-to-text dictation for Mac, Windows, and iPhone. Write 4x faster by speaking instead of typing. Works in Gmail, Slack, VS Code, ChatGPT, and 100+ other apps. Real-time transcription with AI auto-edits and tone adjustment.' },
+            { name: 'ChatGPT', categories: ['LLMs & Chatbots'], pricing: 'Freemium', desc: 'OpenAI\'s flagship language model offering advanced reasoning, coding, and creative writing capabilities.' },
+            { name: 'Claude', categories: ['LLMs & Chatbots'], pricing: 'Freemium', desc: 'Anthropic\'s AI assistant known for massive context windows, nuance, and highly accurate document analysis.' },
+            { name: 'Gemini', categories: ['LLMs & Chatbots'], pricing: 'Freemium', desc: 'Google\'s multimodal AI that deeply integrates with Workspace and processes text, audio, and video natively.' },
+            { name: 'Meta AI', categories: ['LLMs & Chatbots'], pricing: 'Free', desc: 'Open-source Llama models powering fast, accessible AI directly inside WhatsApp, Instagram, and Facebook.' },
+            { name: 'Grok', categories: ['LLMs & Chatbots'], pricing: 'Paid', desc: 'xAI\'s rebellious chatbot with real-time access to the X (Twitter) data stream for up-to-the-minute knowledge.' },
+            { name: 'Wonder Dynamics', categories: ['Video Editing & VFX'], pricing: 'Paid', desc: 'Automatically animate, light, and compose CG characters into live-action scenes. Replaces manual VFX rotoscoping and motion tracking.' },
+            { name: 'Topaz Video AI', categories: ['Video Editing & VFX'], pricing: 'Paid', desc: 'Industry-leading AI upscaling, frame interpolation, de-interlacing, and motion stabilization for professional video post-production.' },
+            { name: 'CapCut Desktop', categories: ['Video Editing & VFX'], pricing: 'Freemium', desc: 'Massive library of AI-driven transitions, auto-captions, vocal isolation, and motion graphics built directly into the timeline.' },
+            { name: 'Suno AI', categories: ['Video Editing & VFX'], pricing: 'Freemium', desc: 'Generate high-quality custom music, soundtracks, and sound effects from simple text prompts to use in your video edits.' },
+            { name: 'Leonardo AI', categories: ['Video Editing & VFX'], pricing: 'Freemium', desc: 'Generate seamless textures, concept art, and visual assets for motion graphics and 3D compositing workflows.' },
+            { name: 'Live3D AI Image Editor', categories: ['Image Editing', 'Design Generators', 'Generative Art'], pricing: 'Free', desc: 'Edit photos using plain text prompts. Change backgrounds, hairstyles, lighting, and more without manual selection.' }
+        ];
+
+        let activeCategories = [];
+        let activePrice = 'all';
+        const searchInput = document.getElementById('searchInput');
+        const grid = document.getElementById('toolsGrid');
+        const categoryFiltersContainer = document.getElementById('categoryFilters');
+        const toolCountSpan = document.getElementById('toolCount');
+
+        const inactiveCatClasses = ['bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-400', 'hover:bg-slate-200', 'dark:hover:bg-slate-700'];
+        const activeCatClasses = ['bg-indigo-100', 'dark:bg-indigo-900/50', 'text-indigo-700', 'dark:text-indigo-300', 'ring-1', 'ring-indigo-500'];
+
+        function setupCategories() {
+            const allCategories = tools.flatMap(tool => tool.categories);
+            const uniqueCategories = [...new Set(allCategories)].sort();
+            
+            // Apply translated text to "All Categories" button
+            const allText = translations[currentLang]?.all_categories || "All Categories";
+            let html = `<button class="cat-btn px-3 py-1.5 rounded-full text-xs font-medium transition-all ${activeCategories.length===0 ? activeCatClasses.join(' ') : inactiveCatClasses.join(' ')}" data-filter="all">${allText}</button>`;
+            
+            uniqueCategories.forEach(cat => {
+                const isActive = activeCategories.includes(cat);
+                html += `<button class="cat-btn px-3 py-1.5 rounded-full text-xs font-medium transition-all ${isActive ? activeCatClasses.join(' ') : inactiveCatClasses.join(' ')}" data-filter="${cat}">${cat}</button>`;
+            });
+            
+            categoryFiltersContainer.innerHTML = html;
+
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const filter = e.target.getAttribute('data-filter');
+                    
+                    if (filter === 'all') {
+                        activeCategories = [];
+                    } else {
+                        if (activeCategories.includes(filter)) {
+                            activeCategories = activeCategories.filter(c => c !== filter);
+                        } else {
+                            activeCategories.push(filter);
+                        }
+                    }
+                    setupCategories(); // Re-render to fix active states
+                    renderTools();
+                });
+            });
+        }
+
+        function renderTools() {
+            grid.innerHTML = '';
+            const searchTerm = searchInput.value.toLowerCase();
+
+            const filteredTools = tools.filter(tool => {
+                const matchesSearch = tool.name.toLowerCase().includes(searchTerm) || tool.desc.toLowerCase().includes(searchTerm);
+                const matchesCategory = activeCategories.length === 0 || activeCategories.every(ac => tool.categories.includes(ac));
+                const matchesPrice = activePrice === 'all' || tool.pricing === activePrice;
+                return matchesSearch && matchesCategory && matchesPrice;
+            });
+
+            toolCountSpan.innerText = `(${filteredTools.length})`;
+
+            if (filteredTools.length === 0) {
+                const noResultsTxt = translations[currentLang]?.no_results || "No tools found matching your criteria.";
+                grid.innerHTML = `<div class="col-span-full py-16 text-center"><p class="text-xl text-slate-500 dark:text-slate-400 font-medium">${noResultsTxt}</p><button onclick="resetFilters()" class="mt-4 text-indigo-600 dark:text-indigo-400 hover:underline">Clear all filters</button></div>`;
+                return;
+            }
+
+            // Get localized string for the card button
+            const visitWebTxt = translations[currentLang]?.visit_website || "Visit Website";
+
+            filteredTools.forEach(tool => {
+                let priceColor = tool.pricing === 'Free' ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 ring-1 ring-emerald-500/20' : 
+                                 tool.pricing === 'Paid' ? 'text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-900/20 ring-1 ring-rose-500/20' : 
+                                 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 ring-1 ring-indigo-500/20';
+
+                // Localize standard pricing tags
+                let displayPricing = tool.pricing;
+                if(displayPricing === 'Free' && translations[currentLang]?.free) displayPricing = translations[currentLang].free;
+                if(displayPricing === 'Paid' && translations[currentLang]?.paid) displayPricing = translations[currentLang].paid;
+                if(displayPricing === 'Freemium' && translations[currentLang]?.freemium) displayPricing = translations[currentLang].freemium;
+
+                const tagsHtml = tool.categories.map(cat => 
+                    `<span class="inline-block bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] uppercase tracking-wider font-semibold px-2 py-1 rounded-md mr-1 mb-1">${cat}</span>`
+                ).join('');
+
+                const card = `
+                    <div class="tool-card bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 flex flex-col h-full relative group">
+                        <div class="flex justify-between items-start mb-3 gap-2">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">${tool.name}</h3>
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap ${priceColor}">${displayPricing}</span>
+                        </div>
+                        <div class="mb-4">
+                            ${tagsHtml}
+                        </div>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-grow">${tool.desc}</p>
+                        
+                        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-auto flex justify-between items-center">
+                            <a href="${tool.url || 'https://' + tool.name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.com'}" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-semibold text-sm flex items-center gap-1 transition-colors">
+                                ${visitWebTxt} 
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+
+        document.querySelectorAll('.price-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.price-btn').forEach(b => {
+                    b.classList.remove('bg-slate-800', 'dark:bg-indigo-600', 'text-white');
+                    b.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+                });
+                
+                e.target.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+                e.target.classList.add('bg-slate-800', 'dark:bg-indigo-600', 'text-white');
+                
+                activePrice = e.target.getAttribute('data-price');
+                renderTools();
+            });
+        });
+
+        window.resetFilters = function() {
+            searchInput.value = '';
+            activeCategories = [];
+            activePrice = 'all';
+            
+            document.querySelectorAll('.price-btn').forEach(b => {
+                if (b.getAttribute('data-price') === 'all') {
+                    b.className = 'price-btn bg-slate-800 dark:bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors active-filter';
+                } else {
+                    b.className = 'price-btn bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg font-medium text-sm transition-colors inactive-filter';
+                }
+            });
+            setupCategories();
+            renderTools();
+        };
+
+        let searchTimeout;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(renderTools, 150);
+        });
+
+        // Cookie Banner Logic
+        const cookieBanner = document.getElementById('cookieBanner');
+        if (!localStorage.getItem('cookiesAccepted')) {
+            setTimeout(() => {
+                cookieBanner.classList.remove('translate-y-full', 'opacity-0');
+            }, 1000);
+        }
+        window.acceptCookies = function() {
+            localStorage.setItem('cookiesAccepted', 'true');
+            cookieBanner.classList.add('translate-y-full', 'opacity-0');
+        };
+
+        // Trigger initial setup
+        applyTranslations('en');
+
+    </script>
+</body>
+</html>
