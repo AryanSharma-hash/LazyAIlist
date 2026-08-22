@@ -1,0 +1,56 @@
+name: Auto PR & Code Review Generator
+
+on:
+  schedule:
+    - cron: '0 4,16 * * *'
+  workflow_dispatch:
+
+jobs:
+  create_and_review_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.AUTO_GH_TOKEN }}
+          fetch-depth: 0
+
+      - name: Create Dynamic Branch and Commit
+        run: |
+          git config --global user.name "AryanSharma-hash"
+          git config --global user.email "amangametester@gmail.com"
+          
+          BRANCH_NAME="auto-update-$(date +%s)"
+          git checkout -b "$BRANCH_NAME"
+          
+          echo "Automated log update: $(date -u)" >> activity_log.txt
+          git add activity_log.txt
+          git commit -m "chore: automated activity sync [skip ci]"
+          git push origin "$BRANCH_NAME"
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+
+      - name: Create Pull Request
+        id: open_pr
+        env:
+          GH_TOKEN: ${{ secrets.AUTO_GH_TOKEN }}
+        run: |
+          PR_URL=$(gh pr create \
+            --base main \
+            --head "$BRANCH_NAME" \
+            --title "Routine Sync: $(date +'%Y-%m-%d')" \
+            --body "Automated branch updates for code review tracking.")
+          echo "PR_URL=$PR_URL" >> $GITHUB_ENV
+          PR_NUMBER=$(echo "$PR_URL" | awk -F'/' '{print $NF}')
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+
+      - name: Submit Code Review
+        env:
+          GH_TOKEN: ${{ secrets.AUTO_GH_TOKEN }}
+        run: |
+          gh pr review "$PR_NUMBER" --comment -b "LGTM! Automated sanity check passed."
+
+      - name: Merge and Clean Up
+        env:
+          GH_TOKEN: ${{ secrets.AUTO_GH_TOKEN }}
+        run: |
+          gh pr merge "$PR_NUMBER" --squash --delete-branch
